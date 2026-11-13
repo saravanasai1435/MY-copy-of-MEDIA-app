@@ -1,0 +1,251 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Public user profile for PULSR creators and members",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "username": { "type": "string", "minLength": 2, "maxLength": 32, "pattern": "^[a-z0-9_.]+$" },
+        "displayName": { "type": "string", "minLength": 1, "maxLength": 64 },
+        "bio": { "type": "string", "maxLength": 240 },
+        "avatarUrl": { "type": "string", "maxLength": 250000 },
+        "followersCount": { "type": "number" },
+        "followingCount": { "type": "number" },
+        "postsCount": { "type": "number" },
+        "isOnline": { "type": "boolean" },
+        "onboarded": { "type": "boolean" },
+        "lastSeen": { "type": "string", "format": "date-time" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "username", "displayName", "followersCount", "followingCount", "postsCount", "createdAt", "updatedAt"]
+    },
+    "UserPrivateInfo": {
+      "title": "UserPrivateInfo",
+      "description": "Private PII isolated from public profiles",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "email": { "type": "string", "maxLength": 256 },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "email", "updatedAt"]
+    },
+    "Post": {
+      "title": "Post",
+      "description": "Photo or video post published to feed or channel",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "authorId": { "type": "string", "maxLength": 128 },
+        "channelId": { "type": "string", "maxLength": 128 },
+        "caption": { "type": "string", "maxLength": 2200 },
+        "mediaUrl": { "type": "string", "maxLength": 250000 },
+        "mediaType": { "type": "string", "enum": ["image", "video"] },
+        "hashtags": { "type": "array" },
+        "likesCount": { "type": "number" },
+        "commentsCount": { "type": "number" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "authorId", "caption", "mediaUrl", "mediaType", "likesCount", "commentsCount", "createdAt", "updatedAt"]
+    },
+    "Shot": {
+      "title": "Shot",
+      "description": "Short vertical video post",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "authorId": { "type": "string", "maxLength": 128 },
+        "channelId": { "type": "string", "maxLength": 128 },
+        "caption": { "type": "string", "maxLength": 1000 },
+        "videoUrl": { "type": "string", "maxLength": 1500 },
+        "posterUrl": { "type": "string", "maxLength": 250000 },
+        "hashtags": { "type": "array" },
+        "likesCount": { "type": "number" },
+        "commentsCount": { "type": "number" },
+        "viewsCount": { "type": "number" },
+        "durationSec": { "type": "number" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "authorId", "caption", "videoUrl", "likesCount", "commentsCount", "viewsCount", "createdAt", "updatedAt"]
+    },
+    "Comment": {
+      "title": "Comment",
+      "description": "Comment on a post or shot",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "targetType": { "type": "string", "enum": ["post", "shot"] },
+        "targetId": { "type": "string", "maxLength": 128 },
+        "authorId": { "type": "string", "maxLength": 128 },
+        "text": { "type": "string", "minLength": 1, "maxLength": 800 },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "targetType", "targetId", "authorId", "text", "createdAt"]
+    },
+    "Channel": {
+      "title": "Channel",
+      "description": "Subscribable creator channel",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "ownerId": { "type": "string", "maxLength": 128 },
+        "name": { "type": "string", "minLength": 2, "maxLength": 64 },
+        "handle": { "type": "string", "minLength": 2, "maxLength": 32 },
+        "description": { "type": "string", "maxLength": 400 },
+        "category": { "type": "string", "maxLength": 48 },
+        "avatarUrl": { "type": "string", "maxLength": 250000 },
+        "bannerUrl": { "type": "string", "maxLength": 250000 },
+        "subscribersCount": { "type": "number" },
+        "postsCount": { "type": "number" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "ownerId", "name", "handle", "category", "subscribersCount", "postsCount", "createdAt", "updatedAt"]
+    },
+    "Subscription": {
+      "title": "Subscription",
+      "description": "User subscription to a channel",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 256 },
+        "userId": { "type": "string", "maxLength": 128 },
+        "channelId": { "type": "string", "maxLength": 128 },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "userId", "channelId", "createdAt"]
+    },
+    "Follow": {
+      "title": "Follow",
+      "description": "User-to-user follow relationship",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 256 },
+        "followerId": { "type": "string", "maxLength": 128 },
+        "followingId": { "type": "string", "maxLength": 128 },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "followerId", "followingId", "createdAt"]
+    },
+    "Conversation": {
+      "title": "Conversation",
+      "description": "1-to-1 direct messaging thread",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 256 },
+        "participantIds": { "type": "array" },
+        "lastMessage": { "type": "string", "maxLength": 500 },
+        "lastSenderId": { "type": "string", "maxLength": 128 },
+        "lastMessageAt": { "type": "string", "format": "date-time" },
+        "unreadBy": { "type": "object" },
+        "typingBy": { "type": "object" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "participantIds", "updatedAt"]
+    },
+    "Message": {
+      "title": "Message",
+      "description": "Direct message inside a conversation",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "senderId": { "type": "string", "maxLength": 128 },
+        "text": { "type": "string", "maxLength": 2000 },
+        "imageUrl": { "type": "string", "maxLength": 250000 },
+        "type": { "type": "string", "enum": ["text", "image", "call"] },
+        "callStatus": { "type": "string", "maxLength": 32 },
+        "callDurationSec": { "type": "number" },
+        "readBy": { "type": "array" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "senderId", "type", "createdAt"]
+    },
+    "Call": {
+      "title": "Call",
+      "description": "1-to-1 WebRTC voice call signaling record",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "callerId": { "type": "string", "maxLength": 128 },
+        "calleeId": { "type": "string", "maxLength": 128 },
+        "conversationId": { "type": "string", "maxLength": 256 },
+        "status": { "type": "string", "enum": ["ringing", "accepted", "declined", "busy", "missed", "ended"] },
+        "offer": { "type": "object" },
+        "answer": { "type": "object" },
+        "durationSec": { "type": "number" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "callerId", "calleeId", "conversationId", "status", "createdAt", "updatedAt"]
+    },
+    "Notification": {
+      "title": "Notification",
+      "description": "In-app user activity notification",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "recipientId": { "type": "string", "maxLength": 128 },
+        "actorId": { "type": "string", "maxLength": 128 },
+        "type": { "type": "string", "enum": ["like", "comment", "follow", "subscribe", "missed_call"] },
+        "targetId": { "type": "string", "maxLength": 128 },
+        "text": { "type": "string", "maxLength": 300 },
+        "read": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "recipientId", "actorId", "type", "text", "read", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "Public user profiles"
+    },
+    "/users/{userId}/private/info": {
+      "schema": { "$ref": "#/entities/UserPrivateInfo" },
+      "description": "Isolated private user PII"
+    },
+    "/posts/{postId}": {
+      "schema": { "$ref": "#/entities/Post" },
+      "description": "Feed photo and video posts"
+    },
+    "/shots/{shotId}": {
+      "schema": { "$ref": "#/entities/Shot" },
+      "description": "Short vertical video shots"
+    },
+    "/comments/{commentId}": {
+      "schema": { "$ref": "#/entities/Comment" },
+      "description": "Comments on posts and shots"
+    },
+    "/channels/{channelId}": {
+      "schema": { "$ref": "#/entities/Channel" },
+      "description": "Subscribable channels"
+    },
+    "/subscriptions/{subId}": {
+      "schema": { "$ref": "#/entities/Subscription" },
+      "description": "Channel subscriptions"
+    },
+    "/follows/{followId}": {
+      "schema": { "$ref": "#/entities/Follow" },
+      "description": "User follows"
+    },
+    "/conversations/{convId}": {
+      "schema": { "$ref": "#/entities/Conversation" },
+      "description": "Direct messaging conversations"
+    },
+    "/conversations/{convId}/messages/{messageId}": {
+      "schema": { "$ref": "#/entities/Message" },
+      "description": "Messages within a conversation"
+    },
+    "/calls/{callId}": {
+      "schema": { "$ref": "#/entities/Call" },
+      "description": "WebRTC voice call signaling sessions"
+    },
+    "/notifications/{notifId}": {
+      "schema": { "$ref": "#/entities/Notification" },
+      "description": "User notifications"
+    }
+  }
+}

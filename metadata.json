@@ -1,0 +1,6 @@
+{
+  "name": "PULSR",
+  "description": "Feel the feed. Social platform with Shots, subscribable Channels, real-time direct messaging, and 1-to-1 WebRTC voice calls.",
+  "requestFramePermissions": ["microphone", "camera"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
